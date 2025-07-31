@@ -6,9 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/cursos_vacacionales";
-    private static final String USER = "root";
-    private static final String PASSWORD = "salome1234";
+    private static final String URL = "jdbc:mysql://b3nfotpoxlph0joy9hjf-mysql.services.clever-cloud.com:3306/b3nfotpoxlph0joy9hjf";
+    private static final String USER = "umrztcuiilbkmh3w";
+    private static final String PASSWORD = "J6KZIX2gpWpMP2tYHG9s";
 
     public static Connection getConnection() throws SQLException {
         String sql = "SELECT * FROM Estudiantes";
