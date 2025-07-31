@@ -1,0 +1,38 @@
+@startuml
+package src {
+  package DaoCV {
+    class CursoDAO
+    class EstudianteDAO
+    class HorarioDAO
+    class InscripcionDAO
+    class UsuarioDAO
+  }
+
+  package ModelCV {
+    class Curso
+    class Estudiante
+    class Horario
+    class Inscripcion
+    class Usuario
+  }
+
+  package util {
+    class DBConnection
+  }
+
+  package VIEW {
+    class CursoPanel
+    class EstudiantePanel
+    class HorarioPanel
+    class InscripcionPanel
+    class LoginFrame
+    class MainFrame
+  }
+}
+
+DaoCV ..> ModelCV : uses
+VIEW ..> ModelCV : uses
+VIEW ..> DaoCV : interacts with
+DaoCV ..> util : uses
+ModelCV ..> util : (possibly)
+@enduml

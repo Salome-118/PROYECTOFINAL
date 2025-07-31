@@ -1,0 +1,157 @@
+@startuml
+package ModelCV {
+  class Curso {
+    + id: int
+    + nombre: String
+    + creditos: int
+    --
+    + getCursoDetails(): String
+  }
+  class Estudiante {
+    + id: int
+    + nombre: String
+    + apellido: String
+    + fechaNacimiento: Date
+    --
+    + getEstudianteInfo(): String
+  }
+  class Horario {
+    + id: int
+    + dia: String
+    + horaInicio: Time
+    + horaFin: Time
+    --
+    + getHorarioDetails(): String
+  }
+  class Inscripcion {
+    + id: int
+    + fechaInscripcion: Date
+    --
+    + getInscripcionDetails(): String
+  }
+  class Usuario {
+    + id: int
+    + username: String
+    + passwordHash: String
+    + rol: String
+    --
+    + login(username, password): boolean
+  }
+}
+
+package DaoCV {
+  class CursoDAO {
+    + insert(curso: Curso): boolean
+    + update(curso: Curso): boolean
+    + delete(id: int): boolean
+    + getById(id: int): Curso
+    + getAll(): List<Curso>
+  }
+  class EstudianteDAO {
+    + insert(estudiante: Estudiante): boolean
+    + update(estudiante: Estudiante): boolean
+    + delete(id: int): boolean
+    + getById(id: int): Estudiante
+    + getAll(): List<Estudiante>
+  }
+  class HorarioDAO {
+    + insert(horario: Horario): boolean
+    + update(horario: Horario): boolean
+    + delete(id: int): boolean
+    + getById(id: int): Horario
+    + getAll(): List<Horario>
+  }
+  class InscripcionDAO {
+    + insert(inscripcion: Inscripcion): boolean
+    + update(inscripcion: Inscripcion): boolean
+    + delete(id: int): boolean
+    + getById(id: int): Inscripcion
+    + getAll(): List<Inscripcion>
+  }
+  class UsuarioDAO {
+    + insert(usuario: Usuario): boolean
+    + update(usuario: Usuario): boolean
+    + delete(id: int): boolean
+    + getById(id: int): Usuario
+    + getByUsername(username: String): Usuario
+  }
+}
+
+package util {
+  class DBConnection {
+    - connection: Connection
+    + getConnection(): Connection
+    + closeConnection(connection: Connection): void
+  }
+}
+
+package VIEW {
+  class CursoPanel {
+    - cursoDAO: CursoDAO
+    + displayCurso(curso: Curso): void
+    + getCursoInput(): Curso
+  }
+  class EstudiantePanel {
+    - estudianteDAO: EstudianteDAO
+    + displayEstudiante(estudiante: Estudiante): void
+    + getEstudianteInput(): Estudiante
+  }
+  class HorarioPanel {
+    - horarioDAO: HorarioDAO
+    + displayHorario(horario: Horario): void
+    + getHorarioInput(): Horario
+  }
+  class InscripcionPanel {
+    - inscripcionDAO: InscripcionDAO
+    + displayInscripcion(inscripcion: Inscripcion): void
+    + getInscripcionInput(): Inscripcion
+  }
+  class LoginFrame {
+    - usuarioDAO: UsuarioDAO
+    + showLogin(): void
+    + authenticateUser(): boolean
+  }
+  class MainFrame {
+    - cursoPanel: CursoPanel
+    - estudiantePanel: EstudiantePanel
+    - horarioPanel: HorarioPanel
+    - inscripcionPanel: InscripcionPanel
+    + initUI(): void
+    + showPanel(panelName: String): void
+  }
+}
+
+' Relationships between Model and DAO
+CursoDAO "1" -- "0..*" Curso : manages >
+EstudianteDAO "1" -- "0..*" Estudiante : manages >
+HorarioDAO "1" -- "0..*" Horario : manages >
+InscripcionDAO "1" -- "0..*" Inscripcion : manages >
+UsuarioDAO "1" -- "0..*" Usuario : manages >
+
+' Relationships between Model entities (common assumptions)
+Estudiante "1" -- "0..*" Inscripcion : has >
+Curso "1" -- "0..*" Inscripcion : has >
+Curso "1" -- "0..*" Horario : has >
+
+' Relationships between DAO and Util
+CursoDAO ..> DBConnection : uses
+EstudianteDAO ..> DBConnection : uses
+HorarioDAO ..> DBConnection : uses
+InscripcionDAO ..> DBConnection : uses
+UsuarioDAO ..> DBConnection : uses
+
+' Relationships between View and DAO (or implied Controller interaction)
+CursoPanel --> CursoDAO : interacts with >
+EstudiantePanel --> EstudianteDAO : interacts with >
+HorarioPanel --> HorarioDAO : interacts with >
+InscripcionPanel --> InscripcionDAO : interacts with >
+LoginFrame --> UsuarioDAO : authenticates with >
+
+' Relationships within View
+MainFrame --> CursoPanel : contains >
+MainFrame --> EstudiantePanel : contains >
+MainFrame --> HorarioPanel : contains >
+MainFrame --> InscripcionPanel : contains >
+' LoginFrame is typically shown before MainFrame, not directly contained in it, but interacts to determine if MainFrame is shown.
+MainFrame .> LoginFrame : initiated after login >
+@enduml|
